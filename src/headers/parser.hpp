@@ -2,15 +2,12 @@
 #include <variant>
 
 #include "tokenizer.hpp"
-
+// Grouping into statements
 struct stmt {
     Token token;
     std::optional<std::string> value{};
 };
-struct iStmt {
-    Token token;
 
-};
 // For whole Prg
 struct Prg {
     std::vector<stmt> stmts;
@@ -35,7 +32,7 @@ private:
             return m_tokens.at(m_index + offset);
         }
     }
-    // Function to consume the character
+    // Function to consume the tokens
     Token consume() {
         return m_tokens.at(m_index++);
     }

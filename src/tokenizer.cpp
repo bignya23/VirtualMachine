@@ -30,6 +30,21 @@ std::vector<Token> Tokenizer::tokenize() {
             else if (buffer == "print" || buffer == "PRINT") {
                 tokens.push_back({.type = PRINT});
             }
+            else if (buffer == "input" || buffer == "INPUT") {
+                tokens.push_back({.type = INPUT});
+            }
+            else if (buffer == "add" || buffer == "ADD") {
+                tokens.push_back({.type = ADD});
+            }
+            else if (buffer == "sub" || buffer == "SUB") {
+                tokens.push_back({.type = SUB});
+            }
+            else if (buffer == "mul" || buffer == "MUL") {
+                tokens.push_back({.type = MUL});
+            }
+            else if (buffer == "div" || buffer == "DIV") {
+                tokens.push_back({.type = DIV});
+            }
             else {
                 tokens.push_back({.type = IDENTIFIER, .val = buffer});
             }
@@ -44,6 +59,7 @@ std::vector<Token> Tokenizer::tokenize() {
             tokens.push_back({.type = NUMBER, .val = buffer});
             buffer.clear();
         }
+        // For strings in print function
         else if (peek().value() == '"') {
             consume();
             while (peek().has_value() && peek().value() != '"') {
@@ -54,6 +70,17 @@ std::vector<Token> Tokenizer::tokenize() {
             consume();
             buffer.clear();
         }
+        // For arithmetic operations
+        else if (peek().value() == '(') {
+            consume();
+            while (peek().has_value() && peek().value() != ')') {
+                buffer.push_back(consume());
+            }
+            tokens.push_back({.type = EXPRESSION, .val = buffer});
+            consume();
+            buffer.clear();
+        }
+        // For empty spaces
         else if(isspace(peek().value())) {
             consume();
         }

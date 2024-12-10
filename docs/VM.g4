@@ -8,13 +8,13 @@ instruction     : arithmetic
                 | io
                 | HALT ;
 
-arithmetic      : ADD | SUB | MUL | DIV ;   // Arithmetic operations
+arithmetic      : ADD | SUB | MUL | DIV ((identifier + identifier) | (identifier + value));   // Arithmetic operations
 stack           : PUSH value | POP ;  //DONE  // Stack operations
 memory          : LOAD identifier | STORE identifier ; //DONE // Memory operations
 control         : JMP label
                 | JZ label
                 | JNZ label ;               // Control flow
-io              : PRINT (STRING | identifier | EMPTY) ; //DONE // Print a string or variable
+io              : PRINT (STRING | identifier | EMPTY) | INPUT identifier; //DONE // Print a string or variable
 HALT            : 'HALT' ;                 // Halt program execution
 
 value           : INT ;                    // Integer value for PUSH

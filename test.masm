@@ -1,12 +1,11 @@
 print "welcome"
 print "Hello this is my own attempt to replicate assembly using c/c++ without resister"
 push 2
-store x
-load x
-push 45
 store y
-print y
+push 3
+store x
+
 print
-print x
+
 
 

@@ -56,6 +56,27 @@ std::optional<stmt> Parser::parse() {
         }
         return s;
     }
+    // INPUT
+    if (peek(0).has_value() && peek().value().type == TokenType::INPUT && peek(1).has_value() && peek(1).value().type == TokenType::IDENTIFIER) {
+        stmt s;
+        s.token = peek().value();
+        consume();
+        s.value = peek().value().val.value();
+        consume();
+        return s;
+    }
+    // ADD, SUB, DIV, MUL
+    if (peek(0).has_value() && peek().value().type == TokenType::ADD || peek().value().type == TokenType::SUB || peek().value().type == TokenType::MUL || peek().value().type == TokenType::DIV && peek(1).has_value() && peek(1).value().type == TokenType::EXPRESSION) {
+        stmt s;
+        s.token = peek().value();
+        consume();
+        s.value = peek().value().val.value();
+        consume();
+        return s;
+
+    }
+
+
     return {};
 
 }

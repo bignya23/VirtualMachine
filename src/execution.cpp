@@ -86,6 +86,13 @@ void Execution::execute() {
             }
 
         }
+        // INPUT
+        if (smt.token.type == TokenType::INPUT) {
+            int val;
+            std::cin >> val;
+            m_map[smt.value.value()] = val;
+        }
+
 
     }
 }
