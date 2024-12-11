@@ -6,9 +6,10 @@ instruction     : arithmetic
                 | memory
                 | control
                 | io
+
                 | HALT ;
 
-arithmetic      : ADD | SUB | MUL | DIV ((identifier + identifier) | (identifier + value));   // Arithmetic operations
+arithmetic      : (INCREASE | DECREASE) (identifier) | (ADD | SUB | MUL | DIV) ((identifier + identifier) | (identifier + value) | (value + value)); // DONE  // Arithmetic operations
 stack           : PUSH value | POP ;  //DONE  // Stack operations
 memory          : LOAD identifier | STORE identifier ; //DONE // Memory operations
 control         : JMP label
@@ -34,6 +35,10 @@ JMP             : 'JMP' ;
 JZ              : 'JZ' ;
 JNZ             : 'JNZ' ;
 PRINT           : 'PRINT' ;
+INPUT           : 'INPUT' ;
+INCREASE        : 'INC' ;
+DECREASE        : 'DEC' ;
+EXPRESSION      : 'EXPRESSION' ;
 STRING          : '"' (~["])* '"' ;        // Double-quoted string
 ID              : [a-zA-Z_][a-zA-Z0-9_]* ;// Identifier for variables/labels
 INT             : [0-9]+ ;                 // Integer values

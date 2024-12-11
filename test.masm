@@ -1,14 +1,18 @@
-print "welcome"
-print "Hello this is my own attempt to replicate assembly using c/c++ without resister"
-push 20
-store y
-push 10
-store x
-print
-sub (x,y)
-store result
-print result
-print
+start:
+    print "welcome"
+    push 20
+    store y
+    push 10
+    store x
+    inc x
+    jmp printx
+    print
+printx:
+    print x
+    load x
+    store result
+    print result
+
 
 
 

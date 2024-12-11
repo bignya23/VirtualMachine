@@ -4,9 +4,8 @@
 
 std::optional<stmt> Parser::parse() {
     // PUSH
-    if (peek(0).has_value() && peek().value().type == TokenType::PUSH && peek(1).has_value() && peek(1).value().type == TokenType::NUMBER) {
+    if (peek(0).has_value() && peek().value().type == TokenType::PUSH && peek(1).has_value() && peek(1).value().type == TokenType::NUMBER ) {
         stmt s;
-
         s.token = peek().value();
         consume();
         s.value = peek().value().val.value();
@@ -76,12 +75,29 @@ std::optional<stmt> Parser::parse() {
         }
 
         return s;
-
+    }
+    // INC, DEC
+    if (peek(0).has_value() && peek().value().type == TokenType::INC || peek().value().type == TokenType::DEC && peek(1).value().type == TokenType::IDENTIFIER) {
+        stmt s;
+        s.token = peek().value();
+        consume();
+        s.value = peek().value().val.value();
+        consume();
+        return s;
+    }
+    // JMP
+    if (peek(0).has_value() && peek().value().type == TokenType::JMP && peek(1).has_value() && peek(1).value().type == TokenType::IDENTIFIER) {
+        stmt s;
+        s.token = peek().value();
+        consume();
+        s.value = peek().value().val.value();
+        consume();
+        return s;
     }
     return {};
 
 }
-
+// Combining the program
 std::vector<stmt> Parser::stmts() {
     Prg p;
     while (peek().has_value()) {
@@ -90,6 +106,9 @@ std::vector<stmt> Parser::stmts() {
         }
         else {
             std::cerr << "ERROR in Parsing" << std::endl;
+            for (auto s : p.stmts) {
+                std::cout << s.token.type << std::endl;
+            }
             exit(EXIT_FAILURE);
         }
     }

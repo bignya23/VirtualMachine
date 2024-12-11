@@ -45,6 +45,21 @@ std::vector<Token> Tokenizer::tokenize() {
             else if (buffer == "div" || buffer == "DIV") {
                 tokens.push_back({.type = DIV});
             }
+            else if (buffer == "inc" || buffer == "INC") {
+                tokens.push_back({.type = INC});
+            }
+            else if (buffer == "dec" || buffer == "DEC") {
+                tokens.push_back({.type = DEC});
+            }
+            else if (buffer == "jmp" || buffer == "JMP") {
+                tokens.push_back({.type = JMP});
+            }
+            else if (buffer == "jnz" || buffer == "JNZ") {
+                tokens.push_back({.type = JNZ});
+            }
+            else if (buffer == "jz" || buffer == "JZ") {
+                tokens.push_back({.type = JZ});
+            }
             else {
                 tokens.push_back({.type = IDENTIFIER, .val = buffer});
             }

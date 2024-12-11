@@ -9,4 +9,6 @@ add_executable(VMachine
         src/tokenizer.cpp
         src/parser.cpp
         src/execution.cpp
-        src/headers/parser.hpp)
+        src/headers/parser.hpp
+        src/headers/labelsprocess.hpp
+        src/labels.cpp)

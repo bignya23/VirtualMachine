@@ -4,12 +4,16 @@
 #include <cctype>
 
 
-void Execution::execute() {
-
-    for (auto& smt : m_stmts) {
+void Execution::execute(std::vector<stmt> m_stmts) {
+    for (auto& smt: m_stmts) {
         //PUSH
         if (smt.token.type == TokenType::PUSH) {
-            m_stack.push(stoi(smt.value.value()));
+            if (smt.value.has_value()) {
+                m_stack.push(stoi(smt.value.value()));
+            }
+            else {
+                std::cout << "Error: No number defined";
+            }
             // std::cout << "Pushed"<< std::endl;
         }
         //POP
@@ -19,7 +23,6 @@ void Execution::execute() {
         }
         //LOAD
         if (smt.token.type == TokenType::LOAD) {
-
             if (std::all_of(smt.value.value().begin(), smt.value.value().end(), ::isdigit)) {
                 m_stack.push(stoi(smt.value.value()));
                 // std::cout << "Pushed"<< std::endl;
@@ -78,7 +81,7 @@ void Execution::execute() {
                 if (s.empty()) {
                     std::cout << "Stack is empty" << std::endl;
                 }
-                std::cout << "Printing stack : " << std::endl;
+                std::cout << "Printing Stack : " << std::endl;
                 while (!s.empty()) {
                     std::cout << i++ << " " << s.top() << std::endl;
                     s.pop();
@@ -99,10 +102,7 @@ void Execution::execute() {
                 std::string buffer{};
                 std::string st = smt.value.value();
                 for (int i = 0; i < st.length(); i++) {
-                    if (st[i] == ' ') {
-                        continue;
-                    }
-                    else if (st[i] ==',') {
+                    if (st[i] == ' ' || st[i] ==',') {
                         continue;
                     }
                     else if (isalpha(st[i])) {
@@ -168,10 +168,8 @@ void Execution::execute() {
                     s.pop();
                     m_stack.push(val1 / val2);
                 }
-
-
             }
-
+            // No val string present
             else {
                 if (m_stack.empty()) {
                     std::cerr << "Less values in stack" << std::endl;
@@ -185,8 +183,52 @@ void Execution::execute() {
                 }
                 int val2 = m_stack.top();
                 m_stack.pop();
-                int result = val1 + val2;
+                int result{};
+                if (smt.token.type == TokenType::ADD) {
+                    result = val1 + val2;
+                }
+                else if (smt.token.type == TokenType::SUB) {
+                    result = val1 - val2;
+                }
+                else if (smt.token.type == TokenType::MUL) {
+                    result = val1 * val2;
+                }
+                else if (smt.token.type == TokenType::DIV) {
+                    result = val1 / val2;
+                }
                 m_stack.push(result);
+            }
+        }
+
+        // JMP
+        if (smt.token.type == TokenType::JMP) {
+            if (smt.value.has_value()) {
+                std::string val = smt.value.value() + ":";
+                execute(allStmts[val]);
+                break;
+            }
+            else {
+                std::cerr << "Invalid Jump" << std::endl;
+                exit(EXIT_FAILURE);
+            }
+        }
+        // INC, DEC
+        if (smt.token.type == TokenType::INC || smt.token.type == TokenType::DEC) {
+            if (smt.value.has_value()) {
+                if (smt.token.type == TokenType::INC) {
+                    m_map[smt.value.value()] += 1;
+                }
+                else if (smt.token.type == TokenType::DEC) {
+                    m_map[smt.value.value()] -= 1;
+                }
+            }
+            else {
+                if (smt.token.type == TokenType::INC) {
+                    std::cerr << "Invalid Increment. Identifier not defined" << std::endl;
+                }
+                if (smt.token.type == TokenType::DEC) {
+                    std::cerr << "Invalid Decrement. Identifier not defined" << std::endl;
+                }
             }
         }
 
